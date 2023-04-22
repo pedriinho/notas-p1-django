@@ -1,0 +1,88 @@
+{% extends 'nota/index.html' %}
+
+{% block content %}
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText"
+  aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+</button>
+<div class="collapse navbar-collapse" id="navbarText">
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'resolution' %}">Notas individuais</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'notas' %}">Notas Gerais</a>
+    </li>
+  </ul>
+</div>
+
+</nav>
+
+<div>
+    <div>
+        <center>
+            <h3 style="position: absolute; top: 10%; left: 50%; transform: translate(-50%, 0);">{{turma}}</h3>
+        </center>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <center>
+            <div id="ab1-ids" class="div-abs ab1">
+                <center>
+                    <h3>AB1</h3>
+                </center>
+                <div class="inputs-abs">
+                    {% for input in ab1 %}
+                        {{input.0}}: <input type="text" id="{{input.0}}" name="{{input.0}}" {% if not not turma %} value="{{input.1}}" {% endif %} placeholder="{{input.0}}" required>
+                        {% if forloop.counter|divisibleby:3 %}
+                            <br><br>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </center>
+        <center>
+            <div id="ab2-ids" class="div-abs ab2">
+                <center>
+                    <h3>AB2</h3>
+                </center>
+                <div class="inputs-abs">
+                    {% for input in ab2 %}
+                        {{input.0}}: <input type="text" id="{{input.0}}" name="{{input.0}}" {% if not not turma %} value="{{input.1}}" {% endif %} placeholder="{{input.0}}" required>
+                        {% if forloop.counter|divisibleby:3 %}
+                            <br><br>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </center>
+        <center>
+            <div id="reavs-ids" class="div-abs reavs">
+                <center>
+                    <h3>Reavaliações</h3>
+                </center>
+                <div class="inputs-abs">
+                    {% for input in reavs %}
+                        {{input.0}}: <input type="text" id="{{input.0}}" name="{{input.0}}" {% if not not turma %} value="{{input.1}}" {% endif %} placeholder="{{input.0}}" required>
+                    {% endfor %}
+                    <br><br>
+                </div>
+            </div>
+        </center>
+        <center>
+            <div id="reavs-ids" class="div-abs turma">
+                <center>
+                    <h3>Nome da Turma</h3>
+                </center>
+                <div class="inputs-abs">
+                    Turma: <input type="text" id="{{input}}" name="Turma" {% if turma != "Sem Turma Registrada" %} value="{{turma}}" {% endif %} placeholder="Turma" maxlength="4" required>
+                    <br><br>
+                </div>
+            </div>
+        </center>
+
+        <input class="btn btn-primary button" type="submit" value="enviar" required>
+    </form>
+</div>
+
+{% endblock %}

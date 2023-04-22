@@ -1,0 +1,85 @@
+{% extends 'nota/index.html' %}
+
+{% block content %}
+<span style="color: aliceblue;">{{registro}}</span>
+<form action="{% url 'searchindividual' %}" method="POST" class="form-inline my-2 my-lg-0">
+  {% csrf_token %}
+  <select id="select" onchange="trocarPesquisa(event)" class="form-control mr-sm-2" name="select">
+    <option id="nome" class="selected" value="nome">Nome</option>
+    <option id="turma" value="turma">Turma</option>
+  </select>
+  <input id="search-select" class="form-control mr-sm-2" type="search" placeholder="Pesquisar nome..." name="search"
+    aria-label="Search">
+  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Pesquisar</button>
+</form>
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText"
+  aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+</button>
+<div class="collapse navbar-collapse" id="navbarText">
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'resolution' %}">Notas individuais</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'notas' %}">Notas Gerais</a>
+    </li>
+  </ul>
+</div>
+
+</nav>
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      {% for coluna in colunas%}
+      <th class="center" scope="col">{{coluna}}</th>
+      {% endfor%}
+    </tr>
+  </thead>
+  <tbody>
+    {%for aluno in alunos%}
+    <tr>
+      <td>{{aluno.nome}}</td>
+      <td class="center">{{aluno.turma}}</td>
+      <td class="center">{{aluno.prova1}}</td>
+      <td onmouseover="notaListaAB1(event)" class="tt center" data-bs-placement="bottom" title="">{{aluno.lista1}}/12
+      </td>
+      <td onmouseover="notaListaAB1(event)" class="tt center" data-bs-placement="bottom" title="">{{aluno.lista2}}/23
+      </td>
+      <td class="center">{{aluno.prova2}}</td>
+      <td onmouseover="notaListaAB1(event)" class="tt center" data-bs-placement="bottom" title="">{{aluno.lista3}}/10
+      </td>
+      <td onmouseover="notaListaAB1(event)" class="tt center" data-bs-placement="bottom" title="">{{aluno.lista4}}/14
+      </td>
+      <td class="center">{{aluno.prova3}}</td>
+      <td onmouseover="notaListaAB2(event)" class="tt center" data-bs-placement="bottom" title="">{{aluno.lista5}}/29
+      </td>
+      <td onmouseover="notaListaAB2(event)" class="tt center" data-bs-placement="bottom" title="">{{aluno.lista6}}/11
+      </td>
+      <td class="center">{{aluno.prova4}}</td>
+      <td onmouseover="notaListaAB2(event)" class="tt center" data-bs-placement="bottom" title="">{{aluno.lista7}}/12
+      </td>
+      <td onmouseover="notaListaAB2(event)" class="tt center" data-bs-placement="bottom" title="">{{aluno.lista8}}/14
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<script>
+  const tooltips = document.querySelectorAll('.tt');
+
+  tooltips.forEach(t => {
+    new bootstrap.Tooltip(t);
+  })
+
+  function notaListaAB1(e) {
+    var valores = e.target.innerText.split('/');
+    e.target.dataset.originalTitle = (valores[0] / 59 * 3).toFixed(2).toString() + ' pontos';
+  }
+
+  function notaListaAB2(e) {
+    var valores = e.target.innerText.split('/');
+    e.target.dataset.originalTitle = (valores[0] / 66 * 3).toFixed(2).toString() + ' pontos';
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'nota/index.html' %}
+
+{% block content %}
+<span style="color: aliceblue;">{{registro}}</span>
+<form action="{% url 'searchgeral' %}" method="POST" class="form-inline my-2 my-lg-0">
+  {% csrf_token %}
+  <select id="select" onchange="trocarPesquisa(event)" class="form-control mr-sm-2" name="select">
+    <option id="nome" class="selected" value="nome">Nome</option>
+    <option id="turma" value="turma">Turma</option>
+  </select>
+  <input class="form-control mr-sm-2" type="search" placeholder="Pesquisar nome..." name="search" aria-label="Search">
+  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Pesquisar</button>
+</form>
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText"
+  aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+</button>
+<div class="collapse navbar-collapse" id="navbarText">
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'resolution' %}">Notas individuais</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'notas' %}">Notas Gerais</a>
+    </li>
+  </ul>
+</div>
+
+</nav>
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      {% for coluna in colunas%}
+      <th class="center" scope="col">{{coluna}}</th>
+      {% endfor%}
+    </tr>
+  </thead>
+  <tbody>
+    {%for aluno in alunos%}
+    <tr>
+      <td>{{aluno.nome}}</td>
+      <td class="center">{{aluno.turma}}</td>
+      <td class="center">{{aluno.ab1}}</td>
+      <td class="center">{{aluno.ab2}}</td>
+      <td class="center">{{aluno.reav}}</td>
+      <td class="center">{{aluno.final}}</td>
+      <td class="center">{{aluno.mediaFinal}}</td>
+      {%if aluno.situacao == 'APROVADO' %}
+      <td class="center" style="background-color: green;">{{aluno.situacao}}</td>
+      {% elif aluno.situacao == 'REPROVADO' %}
+      <td class="center" style="background-color: red;">{{aluno.situacao}}</td>
+      {% else %}
+      <td class="center" style="background-color: yellow;">{{aluno.situacao}}</td>
+      {% endif %}
+
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
