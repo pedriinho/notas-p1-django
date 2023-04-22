@@ -168,6 +168,7 @@ def updateGradesThreading(request):
 def index(request):
 	return redirect('resolution')
 
+# Lista de alunos com notas não calculadas
 def resolution(request):
 	data = {}
 	colunas = ('Nome', 'Turma', 'Prova 1', 
@@ -194,8 +195,8 @@ def resolution(request):
 
 	return render(request, 'nota/resolution.html', data)
 
+# Lista de alunos com notas calculadas
 def notasAcumuladas(request):
-
 	data = {}
 	colunas = ('Nome', 'Turma', 'AB1', 'AB2', 
 	'Reav', 'Final', 'Média', 'Situação',)
@@ -218,11 +219,13 @@ def notasAcumuladas(request):
 
 	return render(request, 'nota/notas.html', data)
 
+# Calcula a média final
 def calcularMediaFinal(aluno):
 	alunoF = NotaAluno.objects.get(id_huxley = aluno.id_huxley)
 	alunoF.mediaFinal = round(((alunoF.ab1 + alunoF.ab2)/2), 2)
 	alunoF.save()
 
+# Calcula a nota da AB1
 def calcularAB1():
 	alunos = Aluno.objects.all()
 
@@ -237,7 +240,8 @@ def calcularAB1():
 			alunoF.save()
 
 		calcularMediaFinal(aluno)
-			
+
+# Calcula a nota da AB2 e a média final		
 def calcularAB2():
 	alunos = Aluno.objects.all()
 
@@ -257,6 +261,7 @@ def calcularAB2():
 				alunoF.situacao = 'APROVADO'
 			alunoF.save()
 
+# Pesquisa por nome ou turma nas notas não calculadas
 def searchNotaIndividual(request):
 	if request.method == 'POST':
 		search = request.POST['search']
@@ -285,7 +290,8 @@ def searchNotaIndividual(request):
 		return render(request, 'nota/resolution.html', dados)
 	else:
 		return redirect('resolution')
-		
+
+# Pesquisa por nome ou turma nas notas calculadas
 def searchNotaGeral(request):
 	if request.method == 'POST':
 		search = request.POST['search']
@@ -313,6 +319,7 @@ def searchNotaGeral(request):
 	else:
 		return redirect('notas')
 
+# Modifica o id da prova ou lista de acordo com a turma
 @user_passes_test(lambda u: u.is_superuser)
 def changeClass(request):
 	dados = {}
@@ -411,3 +418,22 @@ def changeClass(request):
 		else:
 			dados['turma'] = 'Sem Turma Registrada'
 		return render(request, 'nota/changeClass.html', dados)
+
+# Adicinar a turma aos alunos (EC - CC)
+@user_passes_test(lambda u: u.is_superuser)	
+def addTurmaAluno(request):
+	if request.method == 'POST':
+		for turmaAluno in request.FILES['arquivo'].read().decode('utf-8').split('\r\n'):
+			try:
+				aluno = Aluno.objects.get(id_huxley = turmaAluno.split('-')[0])
+				aluno.turma = turmaAluno.split('-')[1].upper()
+				aluno.save()
+
+				notaAluno = NotaAluno.objects.get(id_huxley = turmaAluno.split('-')[0])
+				notaAluno.turma = turmaAluno.split('-')[1].upper()
+				notaAluno.save()
+			except:
+				pass
+		return render(request, 'nota/addTurmaAluno.html')
+	else:
+		return render(request, 'nota/addTurmaAluno.html')

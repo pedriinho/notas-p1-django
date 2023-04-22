@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import index, notasAcumuladas, resolution, searchNotaGeral, searchNotaIndividual, updateGradesThreading, changeClass
+from .views import index, notasAcumuladas, resolution, searchNotaGeral, searchNotaIndividual, updateGradesThreading, changeClass, addTurmaAluno
 
 urlpatterns = [
     path('', index, name='index'),
@@ -10,4 +10,5 @@ urlpatterns = [
     path('resolution/search/', searchNotaIndividual, name='searchindividual'),
     path('notas/search/', searchNotaGeral, name='searchgeral'),
     path('change_class/', changeClass, name='change_class'),
+    path('add_turma_aluno/', addTurmaAluno, name='add_turma_aluno'),
 ]

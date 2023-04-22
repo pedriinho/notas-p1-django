@@ -1,0 +1,34 @@
+{% extends 'nota/index.html' %}
+
+{% block content %}
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+</button>
+<div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'resolution' %}">Notas individuais</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'notas' %}">Notas Gerais</a>
+        </li>
+    </ul>
+</div>
+
+</nav>
+
+<div>
+    <div id="info">
+        <p>O arquivo deve seguir a seguinte estrutura <b>ID_HUXLEY-TURMA</b>, exemplo:</p>
+        <p>12345-EC</p>
+        <p>64325-CC </p>
+    </div>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="arquivo">
+        <input class="btn btn-primary" type="submit" value="enviar">
+    </form>
+</div>
+
+{% endblock %}

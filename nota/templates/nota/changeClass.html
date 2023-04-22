@@ -2,18 +2,18 @@
 
 {% block content %}
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText"
-  aria-expanded="false" aria-label="Toggle navigation">
-  <span class="navbar-toggler-icon"></span>
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
 </button>
 <div class="collapse navbar-collapse" id="navbarText">
-  <ul class="navbar-nav mr-auto">
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'resolution' %}">Notas individuais</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'notas' %}">Notas Gerais</a>
-    </li>
-  </ul>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'resolution' %}">Notas individuais</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'notas' %}">Notas Gerais</a>
+        </li>
+    </ul>
 </div>
 
 </nav>
@@ -33,10 +33,11 @@
                 </center>
                 <div class="inputs-abs">
                     {% for input in ab1 %}
-                        {{input.0}}: <input type="text" id="{{input.0}}" name="{{input.0}}" {% if not not turma %} value="{{input.1}}" {% endif %} placeholder="{{input.0}}" required>
-                        {% if forloop.counter|divisibleby:3 %}
-                            <br><br>
-                        {% endif %}
+                    {{input.0}}: <input type="text" id="{{input.0}}" name="{{input.0}}" {% if not not turma %}
+                        value="{{input.1}}" {% endif %} placeholder="{{input.0}}" required>
+                    {% if forloop.counter|divisibleby:3 %}
+                    <br><br>
+                    {% endif %}
                     {% endfor %}
                 </div>
             </div>
@@ -48,10 +49,11 @@
                 </center>
                 <div class="inputs-abs">
                     {% for input in ab2 %}
-                        {{input.0}}: <input type="text" id="{{input.0}}" name="{{input.0}}" {% if not not turma %} value="{{input.1}}" {% endif %} placeholder="{{input.0}}" required>
-                        {% if forloop.counter|divisibleby:3 %}
-                            <br><br>
-                        {% endif %}
+                    {{input.0}}: <input type="text" id="{{input.0}}" name="{{input.0}}" {% if not not turma %}
+                        value="{{input.1}}" {% endif %} placeholder="{{input.0}}" required>
+                    {% if forloop.counter|divisibleby:3 %}
+                    <br><br>
+                    {% endif %}
                     {% endfor %}
                 </div>
             </div>
@@ -63,7 +65,8 @@
                 </center>
                 <div class="inputs-abs">
                     {% for input in reavs %}
-                        {{input.0}}: <input type="text" id="{{input.0}}" name="{{input.0}}" {% if not not turma %} value="{{input.1}}" {% endif %} placeholder="{{input.0}}" required>
+                    {{input.0}}: <input type="text" id="{{input.0}}" name="{{input.0}}" {% if not not turma %}
+                        value="{{input.1}}" {% endif %} placeholder="{{input.0}}" required>
                     {% endfor %}
                     <br><br>
                 </div>
@@ -75,7 +78,8 @@
                     <h3>Nome da Turma</h3>
                 </center>
                 <div class="inputs-abs">
-                    Turma: <input type="text" id="{{input}}" name="Turma" {% if turma != "Sem Turma Registrada" %} value="{{turma}}" {% endif %} placeholder="Turma" maxlength="4" required>
+                    Turma: <input type="text" id="{{input}}" name="Turma" {% if turma !="Sem Turma Registrada" %}
+                        value="{{turma}}" {% endif %} placeholder="Turma" maxlength="4" required>
                     <br><br>
                 </div>
             </div>
