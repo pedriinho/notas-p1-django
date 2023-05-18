@@ -90,7 +90,7 @@ def getUserScores(url, headers, type_score):
 			if type_score == 1:
 				score += correctProblem['score']
 			else:
-				score += round(correctProblem['partialScore'], 1)
+				score += round(correctProblem['partialScore'], 1) if correctProblem['partialScore'] > correctProblem['penalty'] else correctProblem['penalty']
 		
 		userScore['score'] = score
 
@@ -232,10 +232,15 @@ def calcularAB1():
 	for aluno in alunos:
 		try:
 			alunoF = NotaAluno.objects.get(id_huxley = aluno.id_huxley)
-			alunoF.ab1 = round(((((aluno.prova1 + aluno.prova2)*7)/20) + (((aluno.lista1 + aluno.lista2 + aluno.lista3 + aluno.lista4)*3)/59)), 2)
+			notaAB1 = round(((((aluno.prova1 + aluno.prova2)*7)/20) + (((aluno.lista1 + aluno.lista2 + aluno.lista3 + aluno.lista4)*3)/59)), 2)
+			if notaAB1 > 10:
+				notaAB1 = 10
+			alunoF.ab1 = notaAB1
 			alunoF.save()
 		except:
 			notaAB1 = round(((((aluno.prova1 + aluno.prova2)*7)/20) + (((aluno.lista1 + aluno.lista2 + aluno.lista3 + aluno.lista4)*3)/59)), 2)
+			if notaAB1 > 10:
+				notaAB1 = 10
 			alunoF = NotaAluno(nome = aluno.nome , id_huxley = aluno.id_huxley, ab1 = notaAB1)
 			alunoF.save()
 
@@ -248,13 +253,18 @@ def calcularAB2():
 	for aluno in alunos:
 		try:
 			alunoF = NotaAluno.objects.get(id_huxley = aluno.id_huxley)
-			alunoF.ab2 = round(((((aluno.prova3 + aluno.prova4)*7)/20) + (((aluno.lista5 + aluno.lista6 + aluno.lista7 + aluno.lista8)*3)/66)), 2)
+			notaAB2 = round(((((aluno.prova3 + aluno.prova4)*7)/20) + (((aluno.lista5 + aluno.lista6 + aluno.lista7 + aluno.lista8)*3)/66)), 2)
+			if notaAB2 > 10:
+				notaAB2 = 10
+			alunoF.ab2 = notaAB2
 			alunoF.mediaFinal = round( ((alunoF.ab1 + alunoF.ab2)/2), 2)
 			if alunoF.mediaFinal >= 7:
 				alunoF.situacao = 'APROVADO'
 			alunoF.save()
 		except:
 			notaAB2 = round(((((aluno.prova3 + aluno.prova4)*7)/20) + (((aluno.lista5 + aluno.lista6 + aluno.lista7 + aluno.lista8)*3)/66)), 2)
+			if notaAB2 > 10:
+				notaAB2 = 10
 			alunoF = NotaAluno(nome = aluno.nome, id_huxley=aluno.id_huxley, ab2 = notaAB2)
 			alunoF.mediaFinal = round( ((alunoF.ab1 + alunoF.ab2)/2), 2)
 			if alunoF.mediaFinal >= 7:
