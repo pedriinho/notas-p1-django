@@ -38,7 +38,7 @@ def setStudentScoreTestsOnDatabase(userScores, list_number):
 
 def setStudentScoreTestsReassessmentsOnDatabase(userScores, list_number):
 	for userScore in userScores:
-		student = Aluno.objects.get(id_huxley=userScore['id_huxley'])
+		student = NotaAluno.objects.get(id_huxley=userScore['id_huxley'])
 		if list_number == 1:
 			setattr(student, 'reav', userScore['score'])
 		else:
@@ -149,6 +149,8 @@ def updateGrade():
 			getSubmission(token)
 			calcularAB1()
 			calcularAB2()
+			calcularREAV()
+			calcularFINAL()
 
 			registro = 'Notas atualizadas por ultimo em: ' + datetime.datetime.now(pytz.utc).strftime('%d/%m/%Y %H:%M:%S')
 			if(len(DataAttNota.objects.all()) >= 1):
@@ -156,6 +158,7 @@ def updateGrade():
 					DataAttNota.objects.get(registro=data.registro).delete()
 			DataAttNota.objects.create(registro=registro).save()
 		except:
+			print('error')
 			pass
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -270,6 +273,28 @@ def calcularAB2():
 			if alunoF.mediaFinal >= 7:
 				alunoF.situacao = 'APROVADO'
 			alunoF.save()
+
+def calcularREAV():
+	alunos = NotaAluno.objects.all()
+
+	for aluno in alunos:
+		if aluno.reav >= aluno.ab1 and aluno.ab1 >= aluno.ab2:
+			aluno.mediaFinal = round(((aluno.reav + aluno.ab1)/2), 2)
+		elif aluno.reav >= aluno.ab2 and aluno.ab2 >= aluno.ab1:
+			aluno.mediaFinal = round(((aluno.reav + aluno.ab2)/2), 2)
+		if aluno.mediaFinal >= 7:
+			aluno.situacao = 'APROVADO'
+		aluno.save()
+
+def calcularFINAL():
+	alunos = NotaAluno.objects.all()
+
+	for aluno in alunos:
+		nota  = (6 * ((aluno.ab1 + aluno.ab2)/2) + 4 * aluno.final)/10
+
+		if nota >= 5.5:
+			aluno.mediaFinal = round(nota, 2)
+			aluno.situacao = 'APROVADO'
 
 # Pesquisa por nome ou turma nas notas não calculadas
 def searchNotaIndividual(request):
